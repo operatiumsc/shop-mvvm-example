@@ -1,45 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_mvvm_example/view_models/product_list_view_model.dart';
+import 'package:shop_mvvm_example/view_models/product_view_model.dart';
 
-class HomeScreen extends StatefulWidget {
+import '../models/product.dart';
+
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    final productListViewModel =
-        Provider.of<ProductListViewModel>(context, listen: false);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      productListViewModel.fetchProducts();
-    });
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<ProductViewModel>(context, listen: false);
+    viewModel.fetchProducts();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Welcome to Example shop'),
       ),
-      body: FutureBuilder(
-        future: context.watch<ProductListViewModel>().futureProducts,
+      body: FutureBuilder<List<Product>>(
+        future: viewModel.futureProducts,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Text('Oops! some error occurs.');
+            return const Center(
+              child: Text('Oops! some error occurs.'),
+            );
           } else if (snapshot.hasData) {
-            return ListView.builder(itemBuilder: (context, index) {
-              final product = snapshot.data![index];
-              return ListTile(
-                title: Text(product.title ?? 'Untitle'),
-                subtitle: Text('price: ${product.price}'),
-              );
-            });
+            final products = snapshot.data!;
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return ListTile(
+                  title: Text(product.title ?? 'Untitle'),
+                  subtitle: Text('price: ${product.price}'),
+                );
+              },
+              itemCount: products.length,
+            );
           } else {
             return const CircularProgressIndicator.adaptive();
           }

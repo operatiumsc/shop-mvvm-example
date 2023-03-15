@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../repositories/product.dart';
 
+class ProductViewModel extends ChangeNotifier {
+  ProductViewModel(this.productRepository);
 
-class ProductListViewModel extends ChangeNotifier {
+  final ProductRepository productRepository;
+
   Future<List<Product>>? futureProducts;
-  List<Product> products = [];
 
-  Future fetchProducts() async {
-    final productRepository = ProductRepository();
+  Future<void> fetchProducts() async {
     futureProducts = productRepository.fetchProducts();
-    products = await futureProducts ?? [];
     notifyListeners();
   }
 }

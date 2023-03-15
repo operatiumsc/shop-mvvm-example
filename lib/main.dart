@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_mvvm_example/repositories/product.dart';
+import 'package:shop_mvvm_example/view_models/product_view_model.dart';
 
-import 'services/client.dart';
 import 'views/home_screen.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  ClientService.config();
-
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+          create: (_) => ProductViewModel(MockProductRepository())),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

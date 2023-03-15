@@ -1,6 +1,6 @@
 import '../../models/product.dart';
 
-List<Product> products = [
+List<Product> mockProducts = [
   Product(
     id: 'p1',
     title: 'Product 1',
