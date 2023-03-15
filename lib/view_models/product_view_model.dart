@@ -12,6 +12,5 @@ class ProductViewModel extends ChangeNotifier {
 
   Future<void> fetchProducts() async {
     futureProducts = productRepository.fetchProducts();
-    notifyListeners();
   }
 }

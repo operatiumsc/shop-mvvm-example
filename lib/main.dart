@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_mvvm_example/repositories/product.dart';
-import 'package:shop_mvvm_example/view_models/product_view_model.dart';
 
+
+import 'repositories/product.dart';
+import 'view_models/cart_view_model.dart';
+import 'view_models/product_view_model.dart';
 import 'views/home_screen.dart';
 
 Future<void> main() async {
@@ -11,7 +13,13 @@ Future<void> main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(
-          create: (_) => ProductViewModel(MockProductRepository())),
+        create: (_) => ProductViewModel(
+          MockProductRepository(),
+        ),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CartViewModel(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -23,6 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'MVVM Example shop',
       theme: ThemeData(
         primarySwatch: Colors.blue,
